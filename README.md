@@ -50,7 +50,7 @@ Ensure your `.env` file contains the following variables:
 - `bastion_production`: Bastion host for production profile.
 - `rds_endpoint_dev`: RDS endpoint for development environment.
 - `rds_endpoint_qa`: RDS endpoint for QA environment.
-- `rds_endpoint_demo`: RDS endpoint for demo environment.
+- `rds_endpoint_rc`: RDS endpoint for rc environment.
 - `rds_endpoint_prod`: RDS endpoint for production environment.
 - `rds_port`: RDS port (default: 5432).
 - `local_port`: Local port for SSH tunneling.
