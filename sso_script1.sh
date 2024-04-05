@@ -124,7 +124,7 @@ case $rds_choice in
   3)
     profile=$profile_production
     bastion_host=$bastion_production
-    rds_endpoint=$rds_endpoint_demo
+    rds_endpoint=$rds_endpoint_rc
     generate_token=true
     ;;
   4)
