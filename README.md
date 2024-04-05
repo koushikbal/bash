@@ -1,29 +1,57 @@
-AWS SSO Automation & RDS Tunneling
+# AWS CLI and Session Manager Setup Script
 
-Introduction:
-This bash script automates the setup of AWS CLI, AWS SSO, and establishes a secure SSH tunnel to access RDS instances securely. It streamlines the process of configuring AWS profiles, installing necessary tools like AWS CLI and Session Manager plugin, and setting up SSH keys for secure RDS access through a bastion host.
+This script automates the setup of AWS CLI and Session Manager Plugin, configures AWS SSO profiles, generates temporary DB authentication tokens, and sets up SSH tunneling for connecting to RDS instances securely.
 
-Prerequisites:
-Linux or macOS operating system
-Bash shell
-AWS CLI
-Access to AWS SSO portal
-Access to AWS resources (RDS, EC2 instances)
+## Prerequisites
 
-Installation:
-Clone this repository to your local machine.
-Ensure you have curl installed. If not, it will be installed automatically.
-Ensure you have necessary permissions to install packages and execute scripts with sudo.
-Create an .env file with required variables (see .env.example for reference).
-Run the script setup.sh using the command bash setup.sh.
-Follow the prompts to configure AWS profiles and select RDS endpoints.
+Before running the script, ensure you have the following:
 
-Usage:
-After running the setup script, you can easily access RDS instances through SSH tunneling without exposing database endpoints.
-Choose RDS endpoints from the provided options and follow the instructions to establish a secure connection.
+- Linux or macOS operating system.
+- Access to AWS Console and necessary permissions to set up AWS CLI, Session Manager, and AWS SSO.
+- `curl` installed (will be installed if not already present).
+- `.env` file with required variables (see below for the list).
 
-Features:
-Automatic installation of AWS CLI and Session Manager plugin.
-Seamless configuration of AWS SSO profiles for different environments.
-Secure SSH tunneling for accessing RDS instances via a bastion host.
-Customizable SSH key generation and configuration.
+## Usage
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/yourusername/your-repo.git
+    cd your-repo
+    ```
+
+2. Make sure your `.env` file is in the same directory as the script. If not, create one with the required variables (see below).
+
+3. Run the script:
+
+    ```bash
+    bash setup.sh
+    ```
+
+4. Follow the prompts to select RDS endpoint and complete the setup.
+
+## Environment Variables
+
+Ensure your `.env` file contains the following variables:
+
+- `start_url`: AWS SSO start URL.
+- `region`: AWS region.
+- `internal_role_name`: Role name for internal AWS SSO profile.
+- `internal_account_id`: AWS account ID for internal AWS SSO profile.
+- `prod_role_name`: Role name for production AWS SSO profile.
+- `prod_account_id`: AWS account ID for production AWS SSO profile.
+- `profile_internal`: Name for the internal AWS SSO profile.
+- `profile_production`: Name for the production AWS SSO profile.
+- `username`: Database username.
+- `key_file`: Path to SSH key file.
+- `key_strength`: Strength of SSH key (e.g., 2048).
+- `key_type`: Type of SSH key (e.g., rsa).
+- `bastion_internal`: Bastion host for internal profile.
+- `bastion_production`: Bastion host for production profile.
+- `rds_endpoint_dev`: RDS endpoint for development environment.
+- `rds_endpoint_qa`: RDS endpoint for QA environment.
+- `rds_endpoint_demo`: RDS endpoint for demo environment.
+- `rds_endpoint_prod`: RDS endpoint for production environment.
+- `rds_port`: RDS port (default: 5432).
+- `local_port`: Local port for SSH tunneling.
+- `bastion_user`: Username for the bastion host.
