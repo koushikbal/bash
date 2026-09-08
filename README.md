@@ -1,57 +1,32 @@
-# AWS CLI and Session Manager Setup Script
+# AWS Session Manager and RDS Tunnel Setup
 
-This script automates the setup of AWS CLI and Session Manager Plugin, configures AWS SSO profiles, generates temporary DB authentication tokens, and sets up SSH tunneling for connecting to RDS instances securely.
+A Bash utility for configuring AWS CLI SSO profiles, generating temporary database authentication tokens, and opening secure SSH tunnels to RDS through bastion hosts.
+
+## Safety first
+
+This script changes local AWS and SSH configuration and can connect to production infrastructure. Review the script and .env values before execution. Never commit .env, private keys, AWS credentials, or database tokens.
 
 ## Prerequisites
 
-Before running the script, ensure you have the following:
-
-- Linux or macOS operating system.
-- Access to AWS Console and necessary permissions to set up AWS CLI, Session Manager, and AWS SSO.
-- `curl` installed (will be installed if not already present).
-- `.env` file with required variables (see below for the list).
+- Linux or macOS
+- AWS CLI v2 with permission to configure SSO
+- AWS Systems Manager Session Manager plugin
+- curl, jq, ssh, and an existing bastion SSH key
+- Access to the target AWS accounts and RDS security groups
 
 ## Usage
 
-1. Clone the repository:
+    git clone https://github.com/koushikbal/bash.git
+    cd bash
+    chmod +x sso_script1.sh
+    ./sso_script1.sh
 
-    ```bash
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
-    ```
+The script prompts for the target environment and establishes the selected tunnel locally.
 
-2. Make sure your `.env` file is in the same directory as the script. If not, create one with the required variables (see below).
+## Configuration
 
-3. Run the script:
+Define these variables in a local, untracked .env: start_url, region, internal_role_name, internal_account_id, prod_role_name, prod_account_id, profile_internal, profile_production, username, key_file, key_strength, key_type, bastion_internal, bastion_production, rds_endpoint_dev, rds_endpoint_qa, rds_endpoint_rc, rds_endpoint_prod, rds_port, local_port, and bastion_user.
 
-    ```bash
-    bash setup.sh
-    ```
+## Operational notes
 
-4. Follow the prompts to select RDS endpoint and complete the setup.
-
-## Environment Variables
-
-Ensure your `.env` file contains the following variables:
-
-- `start_url`: AWS SSO start URL.
-- `region`: AWS region.
-- `internal_role_name`: Role name for internal AWS SSO profile.
-- `internal_account_id`: AWS account ID for internal AWS SSO profile.
-- `prod_role_name`: Role name for production AWS SSO profile.
-- `prod_account_id`: AWS account ID for production AWS SSO profile.
-- `profile_internal`: Name for the internal AWS SSO profile.
-- `profile_production`: Name for the production AWS SSO profile.
-- `username`: Database username.
-- `key_file`: Path to SSH key file.
-- `key_strength`: Strength of SSH key (e.g., 2048).
-- `key_type`: Type of SSH key (e.g., rsa).
-- `bastion_internal`: Bastion host for internal profile.
-- `bastion_production`: Bastion host for production profile.
-- `rds_endpoint_dev`: RDS endpoint for development environment.
-- `rds_endpoint_qa`: RDS endpoint for QA environment.
-- `rds_endpoint_rc`: RDS endpoint for rc environment.
-- `rds_endpoint_prod`: RDS endpoint for production environment.
-- `rds_port`: RDS port (default: 5432).
-- `local_port`: Local port for SSH tunneling.
-- `bastion_user`: Username for the bastion host.
+Use least-privilege IAM roles, short-lived SSO sessions, and separate profiles for non-production and production. Validate the selected account and endpoint before opening a tunnel.
